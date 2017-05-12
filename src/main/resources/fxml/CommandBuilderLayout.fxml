@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.ListView?>
+<?import java.lang.String?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.ComboBox?>
+<BorderPane fx:controller="gui.CommandBuilderController" xmlns:fx="http://javafx.com/fxml"
+            fx:id="root">
+    <stylesheets>
+        <URL value="@/css/CommandBuilderStyle.css" />
+    </stylesheets>
+    <top>
+        <VBox>
+            <BorderPane styleClass="borderedContainer">
+                <top>
+                    <BorderPane>
+                        <left>
+                            <Label>SVN/GIT URL: </Label>
+                        </left>
+                        <center>
+                            <TextField fx:id="svnUrl">
+                                <promptText>ex: http://svn.apache.org/repos/asf/ant/core/trunk/, file:///c:/mygit/.git</promptText>
+                            </TextField>
+                        </center>
+                        <right>
+                            <Button onAction="#handleCheckButtonAction">Check</Button>
+                        </right>
+                    </BorderPane>
+                </top>
+                <center>
+                    <GridPane alignment="TOP_CENTER" fx:id="optionGrid">
+                        <rowConstraints>
+                            <RowConstraints valignment="TOP"/>
+                            <RowConstraints valignment="TOP"/>
+                        </rowConstraints>
+                        <TitledPane collapsible="false" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <text>Collect settings</text>
+                            <VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">From: </Label>
+                                    <DatePicker fx:id="fromDate"/>
+                                    <Label styleClass="optionTitle">To: </Label>
+                                    <DatePicker fx:id="toDate"/>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Maximum commit(s)</Label>
+                                    <TextField fx:id="commitLimit">
+                                        <promptText>ex: 100</promptText>
+                                    </TextField>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Target File Extension(s)</Label>
+                                    <TextField fx:id="allowedExtensions">
+                                        <promptText>separated by space. ex: java html</promptText>
+                                    </TextField>
+                                </VBox>
+                            </VBox>
+                        </TitledPane>
+                        <TitledPane fx:id="gitSettings" collapsible="false" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <text>Collect settings (Git only)</text>
+                            <VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Branch to collect </Label>
+                                    <ComboBox fx:id="branchComboBox">
+                                        <promptText>Select branch...</promptText>
+                                    </ComboBox>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Temp dir. name</Label>
+                                    <TextField fx:id="gitTempDir">
+                                        <promptText>ex: git_temp</promptText>
+                                    </TextField>
+                                </VBox>
+                                <HBox>
+                                    <CheckBox fx:id="preserveTempDir" styleClass="optionTitle">Keep temp dir.</CheckBox>
+                                </HBox>
+                            </VBox>
+                        </TitledPane>
+                        <TitledPane collapsible="false" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <text>Merge settings</text>
+                            <VBox>
+                                <VBox>
+                                    <fx:define>
+                                        <ToggleGroup fx:id="commitToggleGroup"/>
+                                    </fx:define>
+                                    <Label styleClass="optionTitle">Merging rule</Label>
+                                    <RadioButton fx:id="mergingWindow" selected="true" text="Window" toggleGroup="$commitToggleGroup"/>
+                                    <RadioButton fx:id="mergingDuplicatedWindow" text="Window (duplicated)" toggleGroup="$commitToggleGroup"/>
+                                    <RadioButton fx:id="mergingDistance" text="Distance" toggleGroup="$commitToggleGroup"/>
+                                    <RadioButton fx:id="mergingNone" text="None" toggleGroup="$commitToggleGroup"/>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Window size (unit: s)</Label>
+                                    <TextField fx:id="windowSize">
+                                        <promptText>ex: 60</promptText>
+                                    </TextField>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Max distinct packages in a group</Label>
+                                    <TextField fx:id="maxDistinctPackage">
+                                        <promptText>ex: 5</promptText>
+                                    </TextField>
+                                </VBox>
+                                <VBox>
+                                    <CheckBox fx:id="ignoreSingleFile" styleClass="optionTitle">Ignore groups with a single file</CheckBox>
+                                </VBox>
+
+                            </VBox>
+                        </TitledPane>
+                        <TitledPane collapsible="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <text>Export settings</text>
+                            <VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">File naming rule</Label>
+                                    <fx:define>
+                                        <ToggleGroup fx:id="namingToggleGroup"/>
+                                    </fx:define>
+                                    <RadioButton fx:id="namingNumbering" selected="true" text="Numbering" toggleGroup="$namingToggleGroup"/>
+                                    <RadioButton fx:id="namingOverriding" text="Overriding" toggleGroup="$namingToggleGroup"/>
+                                    <RadioButton fx:id="namingError" text="Error" toggleGroup="$namingToggleGroup"/>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Export file name</Label>
+                                    <TextField fx:id="exportFileName">
+                                        <promptText>ex: myResult.db</promptText>
+                                    </TextField>
+                                </VBox>
+                                <VBox>
+                                    <Label styleClass="optionTitle">Export format</Label>
+                                    <fx:define>
+                                        <ToggleGroup fx:id="exportFormatGroup"/>
+                                    </fx:define>
+                                    <RadioButton fx:id="exportCsv" selected="true" text="CSV" toggleGroup="$exportFormatGroup"/>
+                                    <RadioButton fx:id="exportSqlite" text="SqLite" toggleGroup="$exportFormatGroup"/>
+                                </VBox>
+                            </VBox>
+                        </TitledPane>
+
+                        <HBox GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                            <CheckBox fx:id="debug" styleClass="optionTitle">Debug Mode (More messages)</CheckBox>
+                        </HBox>
+                        <HBox GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                            <Label>* All options except the SVN URL are optional.</Label>
+                        </HBox>
+                        <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="2">
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="buildButton" maxHeight="Infinity" maxWidth="Infinity"
+                                    onAction="#handleBuildButtonAction">Build arguments</Button>
+                        </HBox>
+                    </GridPane>
+                </center>
+            </BorderPane>
+        </VBox>
+
+    </top>
+
+    <center>
+        <BorderPane styleClass="borderedContainer">
+            <top>
+                <BorderPane>
+                    <left>
+                        <Label>Arguments:</Label>
+                    </left>
+                    <center>
+                        <TextField fx:id="argumentsField">
+                            <promptText>build arguments from above or input your own.</promptText>
+                        </TextField>
+                    </center>
+                    <right>
+                        <Button fx:id="extractButton" defaultButton="true" onAction="#handleExtractButtonAction">Extract</Button>
+                    </right>
+                </BorderPane>
+            </top>
+            <center>
+                <ListView fx:id="outputList">
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Standard outputs will be printed here."/>
+                    </FXCollections>
+                </ListView>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

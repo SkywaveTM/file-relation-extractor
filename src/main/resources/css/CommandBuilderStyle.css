@@ -1,0 +1,32 @@
+#root {
+    -fx-padding: 8px;
+}
+
+.borderedContainer {
+    -fx-border-color: gray;
+    -fx-border-style: solid;
+    -fx-padding: 8px;
+}
+
+.borderedContainer > * {
+    -fx-padding: 4px;
+}
+
+#optionGrid > * {
+
+}
+
+#optionGrid > TitledPane > * > * > * {
+    -fx-padding: 4px;
+}
+
+#optionGrid {
+    -fx-hgap: 8px;
+    -fx-vgap: 8px;
+}
+
+.optionTitle {
+    -fx-text-fill: cornflowerblue;
+    -fx-font-size: 13px;
+    -fx-font-weight: bolder;
+}
